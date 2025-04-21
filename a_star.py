@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 '''
 a = g(n1) + h(x1,y1)
 b = g(n2) + h(x2,y2)
@@ -71,6 +73,12 @@ class State:
      def get_h(self):
           return self.h
      
+     def __str__(self):
+          string = ""
+          for i in self.board:
+               string+=str(i)+"\n"
+          return string
+     
 class AStarFrontier:
      def __init__(self, initial_state:State = None):
           if initial_state is None:
@@ -106,8 +114,73 @@ class Search:
                action=None
           )
           self.frontier = AStarFrontier(self.initial_state)    
+          self.goal_board = self.generate_goal_state()
+          
+     def generate_goal_state(self):
+          agent_x,agent_y = self.initial_state.get_pos()
+          goal_x,goal_y = self.initial_state.get_pos(deli=Element.GOAL)
+          
+          c_board = deepcopy(self.initial_board)
+          c_board[agent_x][agent_y] = Element.PATH
+          c_board[goal_x][goal_y] = Element.AGENT
+          
+          return c_board
           
           
+     def action(self, state:State):
+          agent_x,agent_y = state.get_pos()
+          actions = []
+          
+          if state.board[agent_x][agent_y+1]==Element.PATH or state.board[agent_x][agent_y+1]==Element.GOAL :
+               actions.append(Action.RIGHT)
+          if state.board[agent_x][agent_y-1]==Element.PATH or state.board[agent_x][agent_y-1]==Element.GOAL :
+               actions.append(Action.LEFT)
+          if state.board[agent_x-1][agent_y]==Element.PATH or state.board[agent_x-1][agent_y]==Element.GOAL :
+               actions.append(Action.TOP)
+          if state.board[agent_x+1][agent_y]==Element.PATH or state.board[agent_x+1][agent_y]==Element.GOAL :
+               actions.append(Action.BOTTOM)
+               
+          return actions
+     
+     def result(self, state:State, action:Action):
+          agent_x,agent_y = state.get_pos()
+          c_board = deepcopy(state.board)
+          
+          # Reseting the board elements
+          c_board[agent_x][agent_y] = Element.PATH
+          
+          if action==Action.RIGHT:
+               c_board[agent_x][agent_y+1] = Element.AGENT
+          elif action==Action.LEFT:
+               c_board[agent_x][agent_y-1] = Element.AGENT
+          elif action==Action.TOP:
+               c_board[agent_x-1][agent_y] = Element.AGENT
+          elif action==Action.LEFT:
+               c_board[agent_x+1][agent_y] = Element.AGENT
+               
+          return State(
+               board=c_board,
+               parent=state,
+               action=action
+          )
+
      def search(self):
+          explored_boards = []
+          
           while self.frontier:
-               pass
+               top_state:State = self.frontier.pop()
+               if top_state.board==self.goal_board:
+                    print("Found")
+                    break
+               
+               actions = self.action(top_state)
+               for action in actions:
+                    state:State = self.result(top_state, action)
+                    if not(any([state.board == explored_board for explored_board in explored_boards])):
+                         self.frontier.push(state)
+                         
+          else:
+               print("No Solutions found")
+                    
+               
+               
