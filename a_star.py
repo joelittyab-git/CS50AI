@@ -5,7 +5,7 @@ b = g(n2) + h(x2,y2)
 net = min(a,b)
 
 g: net steps taken
-h: heurestic (Manhatten distance)
+h: heurestic (Manhattan distance)
 '''
 
 class Element:
@@ -70,5 +70,44 @@ class State:
      
      def get_h(self):
           return self.h
+     
+class AStarFrontier:
+     def __init__(self, initial_state:State = None):
+          if initial_state is None:
+               self.array = []
+               return
+          self.array = [initial_state]
           
-
+     def push(self, element:State):
+          n = len(self.array)
+          
+          if n==0:
+               self.array.append(element)
+               return
+          
+          for i in range(n):
+               arr:State = self.array[i]
+               if element.eval_fn<arr.eval_fn:
+                    self.array.insert(i, element)
+                    break
+          else: 
+               self.array.append(element)
+               
+     def pop(self):
+          return self.array.pop(0)
+     
+class Search:
+     
+     def __init__(self, board):
+          self.initial_board = board
+          self.initial_state = State(
+               board=self.initial_board,
+               parent=None,
+               action=None
+          )
+          self.frontier = AStarFrontier(self.initial_state)    
+          
+          
+     def search(self):
+          while self.frontier:
+               pass
