@@ -40,11 +40,12 @@ class State:
      def calculate_heurestic(self):
           # Calculation of heurestic
           agent_x, agent_y = self.get_pos()
-          goal_x,goal_y = self.get_pos(deli = Element.GOAL)
-          
-          h_x = abs(agent_x-goal_x)
-          h_y = abs(agent_y-goal_y)
-          
+          try:
+               goal_x,goal_y = self.get_pos(deli = Element.GOAL)
+               h_x = abs(agent_x-goal_x)
+               h_y = abs(agent_y-goal_y)
+          except:
+               return 0          
           return h_x + h_y
      
      def get_pos(self, deli:Element = Element.AGENT):
@@ -57,7 +58,10 @@ class State:
                for j in range(columns):
                     if self.board[i][j] == deli:
                          return i,j
-          raise Exception("No Agent found")
+          if Element.GOAL==deli:
+               raise Exception("No Goal found")
+               return
+          raise Exception("No agent found")          
      
      # Evaluates g(n) + h(x,y) : evalueation function
      def evaluate_function(self):
@@ -85,6 +89,11 @@ class AStarFrontier:
                self.array = []
                return
           self.array = [initial_state]
+     
+     def __bool__(self):
+          if len(self.array)==0:
+               return False
+          return True
           
      def push(self, element:State):
           n = len(self.array)
@@ -103,6 +112,7 @@ class AStarFrontier:
                
      def pop(self):
           return self.array.pop(0)
+     
      
 class Search:
      
@@ -155,7 +165,7 @@ class Search:
                c_board[agent_x][agent_y-1] = Element.AGENT
           elif action==Action.TOP:
                c_board[agent_x-1][agent_y] = Element.AGENT
-          elif action==Action.LEFT:
+          elif action==Action.BOTTOM:
                c_board[agent_x+1][agent_y] = Element.AGENT
                
           return State(
@@ -169,7 +179,11 @@ class Search:
           
           while self.frontier:
                top_state:State = self.frontier.pop()
-               if top_state.board==self.goal_board:
+               print(top_state)
+               explored_boards.append(top_state.board)
+               # print(self.initial_state)
+               print(self.initial_state.get_pos(deli=Element.GOAL), self.initial_state.get_pos())
+               if top_state.get_pos()==self.initial_state.get_pos(deli=Element.GOAL):
                     print("Found")
                     break
                
@@ -184,3 +198,16 @@ class Search:
                     
                
                
+maze = [
+     ['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'],
+     ['X', 'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'G', 'X'],
+     ['X', 'X', ' ', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', ' ', 'X'],
+     ['X', 'X', ' ', 'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X', ' ', 'X'],
+     ['X', 'X', ' ', 'X', ' ', 'X', 'X', 'X', 'X', 'X', ' ', 'X', ' ', 'X'],
+     ['X', 'X', ' ', ' ', ' ', 'X', ' ', ' ', ' ', ' ', ' ', 'X', ' ', 'X'],
+     ['X', 'X', 'X', 'X', ' ', 'X', ' ', 'X', 'X', 'X', 'X', 'X', ' ', 'X'],
+     ['X', ':', ' ', ' ', ' ', 'X', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'X'],
+     ['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']
+]
+
+Search(maze).search()
