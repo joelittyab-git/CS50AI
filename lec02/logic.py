@@ -1,8 +1,5 @@
 from itertools import product
 
-
-
-
 class Proposition:
      
      def evaluate(self, model):
@@ -114,3 +111,39 @@ class And(Proposition):
      
      def symbols(self):
           return set.union(*[conj.symbols() for conj in self.conjuncts])
+     
+class Or(Proposition):
+     def __init__(self, *operands):
+          if len(operands)<2:
+               raise Exception("Or requires atleast two operands")
+          for operand in operands:
+               Proposition.validate(operand)
+          self.operands = list(operands)
+          
+     def __eq__(self, value):
+          return isinstance(value, Or) and self.operands == value.operands
+     
+     def __hash__(self):
+          return hash(
+                    ("or", tuple(hash(disjunct) for disjunct in self.operands))
+          )
+     def __repr__(self):
+          string = ", ".join([str(oper) for oper in self.operands])
+          return f"Or({string})"
+     
+     def add(self, disj):
+          Proposition.validate(disj)
+          self.operands.append(disj)
+          
+     def evaluate(self, model):
+          for oper in self.operands:
+               oper:Proposition = oper
+               if oper.evaluate(model=model):return True
+          return False
+     
+     def formula(self):
+          string = " v ".join([oper.formula() for oper in self.operands])
+          return f"({string})"
+     
+     def symbols(self):
+          return set.union(*[oper.symbols() for oper in self.operands])
