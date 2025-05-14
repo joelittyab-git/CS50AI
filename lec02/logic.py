@@ -80,8 +80,10 @@ class Not(Proposition):
      
 class And(Proposition):
      def __init__(self, *conj):
-          for conjuction in conj:
-               Proposition.validate(conjuction)     
+          if len(conj) < 2:
+               raise Exception("And requires at least two operands.")
+          for conjunction in conj:
+               Proposition.validate(conjunction)
           self.conjuncts = list(conj)
           
      def __eq__(self, value):
@@ -97,7 +99,7 @@ class And(Proposition):
           return f"And({string})"
      
      def add(self, conj):
-          Proposition.evaluate(conj)
+          Proposition.validate(conj)
           self.conjuncts.append(conj)
           
      def evaluate(self, model:dict):
@@ -106,3 +108,9 @@ class And(Proposition):
                if not conj.evaluate(model=model):
                     return False
           return True
+     def formula(self):
+          string =  " ∧ ".join([conj.formula() for conj in self.conjuncts])
+          return f"({string})"
+     
+     def symbols(self):
+          return set.union(*[conj.symbols() for conj in self.conjuncts])
