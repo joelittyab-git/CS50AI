@@ -3,7 +3,7 @@ from itertools import product
 class Proposition:
      
      def evaluate(self, model):
-          '''Evaluates the logical proposition against a model containing values for each data value'''
+          '''Evaluates the logical proposition against a model containing values for each data item'''
           
           raise Exception("Nothing to evaluate ('evaluate' function not implemented)")
      
@@ -19,7 +19,7 @@ class Proposition:
      
      @staticmethod
      def validate(proposition):
-          '''Valdates if an object is a proposition'''
+          '''Validates if an object is a proposition'''
           
           if not isinstance(proposition, Proposition):
                raise TypeError("Must be a logical proposition")
@@ -147,3 +147,38 @@ class Or(Proposition):
      
      def symbols(self):
           return set.union(*[oper.symbols() for oper in self.operands])
+     
+class Implication(Proposition):
+     def __init__(self, antecedent:Proposition, consequent:Proposition):
+          Proposition.validate(antecedent)
+          Proposition.validate(consequent)
+          
+          self.antecedent = antecedent
+          self.consequent = consequent
+          
+          
+     def __eq__(self, value):
+          return (isinstance(value, Implication) 
+               and self.antecedent == value.antecedent
+               and self.consequent == value.consequent
+          )
+
+     def __hash__(self):
+          return hash(('implies', hash(self.antecedent), hash(self.consequent)))
+     
+     def __repr__(self):
+          return f"Implication({str(self.antecedent)}, {str(self.consequent)})"
+     
+     def evaluate(self, model):
+          # The only scenario when the this proposition returns False is when the antecedent is True and consequent is False
+          if self.antecedent.evaluate(model=model) and not self.consequent.evaluate(model=model):
+               return False
+          return True
+     
+     def formula(self):
+          return f"({self.antecedent.formula()} => {self.consequent.formula()})"
+     
+     def symbols(self):
+          return set.union(self.antecedent.symbols(), self.consequent.symbols())
+     
+     
