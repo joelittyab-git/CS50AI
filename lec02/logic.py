@@ -182,3 +182,35 @@ class Implication(Proposition):
           return set.union(self.antecedent.symbols(), self.consequent.symbols())
      
      
+class Biconditional(Proposition):
+     def __init__(self, left:Proposition, right:Proposition):
+          Proposition.validate(left)
+          Proposition.validate(right)
+          self.left = left
+          self.right = right
+          
+     def __eq__(self, value):
+          return (isinstance(value, Biconditional) 
+                  and self.right == value.right
+                  and self.left == value.left 
+               )
+     def __hash__(self):
+          return hash(('biconditional', hash(self.left), hash(self.right)))
+     
+     def __repr__(self):
+          return f"Bicondition({str(self.left)}, {str(self.right)})"
+     
+     def evaluate(self, model):
+          # checks for two truths or two false
+          true_doublet = self.right.evaluate(model=model) and self.left.evaluate(model=model)
+          false_doublet = (not self.right.evaluate(model=model)) and (not self.left.evaluate(model=model))
+          
+          if true_doublet or false_doublet:
+               return True
+          return False
+     
+     def formula(self):
+          return f"({self.left.formula()} <=> {self.right.formula()})"
+     
+     def symbols(self):
+          return self.right.symbols().union(self.left.symbols())
