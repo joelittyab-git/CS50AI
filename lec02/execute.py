@@ -17,7 +17,7 @@ R = Symbol("It is a Tuesday")
 e = LogicalInferenceEngine(And(
      Implication(And(R, Not(P)), Q),
      Not(Q),
-     R    #P should retrun true
+     R    #P should return true
 ))
 s = e.evaluate_for(P)
 print(s)
