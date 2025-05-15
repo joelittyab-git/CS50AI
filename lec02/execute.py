@@ -31,7 +31,7 @@ knowledge = And(
     W,                          # It is a weekday
     C                           # Charlie goes out
 )
-query = Not(C)                  
+query = Not(C)                  # If evaluation returns true => Contradiction
 
 e = LogicalInferenceEngine(knowledge)
 s = e.evaluate_for(query)
