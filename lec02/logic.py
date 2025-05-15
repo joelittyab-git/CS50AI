@@ -1,5 +1,3 @@
-from itertools import product
-
 class Proposition:
      
      def evaluate(self, model):
@@ -17,6 +15,11 @@ class Proposition:
           
           return set()
      
+     def objects(self):
+          '''Returns the set of all basic symbol objects in the current expression'''
+          
+          return set()
+     
      @staticmethod
      def validate(proposition):
           '''Validates if an object is a proposition'''
@@ -28,7 +31,10 @@ class Proposition:
 class Symbol(Proposition):
      def __init__(self, name):
           self.name = name
-          
+     
+     def __str__(self):
+          return self.__repr__()
+     
      def __eq__(self, value):
           return isinstance(value, Symbol) and self.name == value.name
      
@@ -50,6 +56,9 @@ class Symbol(Proposition):
      
      def symbols(self)->set:
           return {self.name}
+     
+     def objects(self):
+          return {self}
      
      
 class Not(Proposition):
@@ -74,6 +83,9 @@ class Not(Proposition):
      
      def symbols(self):
           return self.operand.symbols()
+     
+     def objects(self):
+          return self.operand.objects()
      
 class And(Proposition):
      def __init__(self, *conj):
@@ -112,6 +124,9 @@ class And(Proposition):
      def symbols(self):
           return set.union(*[conj.symbols() for conj in self.conjuncts])
      
+     def objects(self):
+          return set.union(*[conj.objects() for conj in self.conjuncts])
+     
 class Or(Proposition):
      def __init__(self, *operands):
           if len(operands)<2:
@@ -142,11 +157,14 @@ class Or(Proposition):
           return False
      
      def formula(self):
-          string = " v ".join([oper.formula() for oper in self.operands])
+          string = " ∨ ".join([oper.formula() for oper in self.operands])
           return f"({string})"
      
      def symbols(self):
           return set.union(*[oper.symbols() for oper in self.operands])
+     
+     def objects(self):
+          return set.union(*[oper.objects() for oper in self.operands])
      
 class Implication(Proposition):
      def __init__(self, antecedent:Proposition, consequent:Proposition):
@@ -180,7 +198,8 @@ class Implication(Proposition):
      
      def symbols(self):
           return set.union(self.antecedent.symbols(), self.consequent.symbols())
-     
+     def objects(self):
+          return set.union(self.antecedent.objects(), self.consequent.objects())
      
 class Biconditional(Proposition):
      def __init__(self, left:Proposition, right:Proposition):
@@ -214,3 +233,6 @@ class Biconditional(Proposition):
      
      def symbols(self):
           return self.right.symbols().union(self.left.symbols())
+     
+     def objects(self):
+          return set.union(self.left.objects(), self.right.objects())
