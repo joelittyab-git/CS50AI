@@ -1,6 +1,6 @@
 class Proposition:
      
-     def evaluate(self, model):
+     def evaluate(self, model)->bool:
           '''Evaluates the logical proposition against a model containing values for each data item'''
           
           raise Exception("Nothing to evaluate ('evaluate' function not implemented)")
