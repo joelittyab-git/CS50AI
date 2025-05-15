@@ -15,9 +15,9 @@ Q = Symbol("Jack goes out")
 R = Symbol("It is a Tuesday")
 
 e = LogicalInferenceEngine(And(
-     Implication(And(R, Not(P)), Q),
-     Not(Q),
-     R    #P should return true
+     Implication(And(R, Not(P)), Q),    # If it is a tuesday and it does not rain implies that Jack goes out
+     Not(Q),                            # Jack does not go out
+     R                                  # It is a Tuesday
 ))
-s = e.evaluate_for(P)
+s = e.evaluate_for(P)                   
 print(s)
