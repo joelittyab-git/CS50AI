@@ -28,7 +28,7 @@ class LogicalInferenceEngine():
           for value in values:
                model_space.append(dict(zip(symbols, value)))
                
-          
+          # checks all model in model_space against the knowldge_base
           for model in model_space:
                if self.knowledge_base.evaluate(model=model):
                     if not evaluate_query(query, model):
