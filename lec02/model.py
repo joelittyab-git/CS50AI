@@ -24,6 +24,8 @@ class LogicalInferenceEngine():
           Proposition.validate(query)
           symbols = query.objects().union(self.knowledge_base.objects())
           n_s = len(symbols)
+          
+          # generates cartesian product of three sets of (True, False) values to attain all possible combination of models
           values = product([True, False], repeat=n_s)
           model_space = []
           for value in values:
