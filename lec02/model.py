@@ -10,11 +10,12 @@ from logic import (
 from itertools import product
 
 class LogicalInferenceEngine():
-     def  __init__(self, knowledge:Proposition):
+     def  __init__(self, knowledge:And):
           Proposition.validate(knowledge)
           self.knowledge_base = knowledge
           
      def evaluate_for(self, query:Proposition):
+          '''Evaluaties a logical proposition based on the current knowledge_base'''
           
           def evaluate_query(query:Proposition, model):
                return query.evaluate(model)
@@ -35,8 +36,10 @@ class LogicalInferenceEngine():
                          return False
                     
           return True
+     
+     def add_knowledge(self, propostion:Proposition):
+          '''Adds knowledge proposition to the knowledge base'''
+
+          Proposition.validate(proposition=Proposition)
+          self.knowledge_base.add(propostion)
                     
-               
-                    
-               
-          
