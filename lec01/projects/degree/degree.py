@@ -167,24 +167,31 @@ def search(source:int, target:int):
           visited.append(state.get_id())
           if state.get_id()==target:
                solutions.append(state)
-               print(state.get_cost())
+               print(f"COST: {state.get_cost()}")
+               traverse(state)
                break
           all = actions(state=state)
           for action in all:
                new_states:list = result(preceeding_state=state, action=action)
                print(f"New states: {new_states}")
                frontier.push(*new_states)
-     print(solutions.pop())
+               
+
+def traverse(state:State, k = 0):
+     if state.parent is None:
+          print(f" [{state}]")
+          return
+     
+     if k==0:
+          print(f"[{state}] --> ({state.action})", end='')
+          return traverse(state=state.parent, k = 1)
+     
+     print(f" --> [{state}] --> ({state.action})", end='')
+     return traverse(state=state.parent, k=k)
+     
                
           
 search(102,144)
              
-# def shortest_path(source:int, target:int):
-#      pass
-            
-# print(movies)
-# print(people)
-# print(stars)
-# print(get_person_name_for(129))
 
           
