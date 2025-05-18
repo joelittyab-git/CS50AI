@@ -7,7 +7,7 @@ load_dotenv()
 
 movies = {}
 people = {}
-stars = {}
+stars = []
 
 def load_file_data():
      M_PATH = os.getenv('MOVIES_PATH')
@@ -33,22 +33,44 @@ def load_file_data():
      with open(S_PATH, 'r') as file:
           reader = csv.reader(file)
           for read in reader:
-               stars[read[0]] = read[1]
+               stars.append(read)
           
 load_file_data()
 
-def get_name_for(id:int):
+def get_person_name_for(id:int):
+     '''Returns the persons name based on his/her id'''
      return people[str(id)][0]
+
+def get_movie_id_for(id:int):
+     '''Returns the movie ids in integers for a given person id'''
+     movies = []
+     for t in stars:
+          if str(id).strip()==t[0].strip():
+               movies.append(int(t[1]))
+     return movies
+               
+def get_stars_for(id:int):
+     '''Returns all the stars (person id) for the movie with id "id"'''
+     movie_stars = []
+     for t in stars:
+          if t[1]==str(id):
+               movie_stars.append(int(t[0]))
+               
+     return movie_stars
 
 # AI impl. ----------------
 class State:
      def __init__(self,parent, name:str, cost:int, action, id):
-          self.parent = parent     # Parent state
+          assert type(id)==int
           
+          self.parent = parent     # Parent state
           self.name = name 
           self.cost = cost
           self.action = action
           self.id = id
+          
+     def __str__(self):
+          return f"{self.name} | {self.id}"
           
      def get_name(self):
           return deepcopy(self.name)
@@ -69,10 +91,10 @@ class Frontier:
           
           return self.frontier.pop()
      
-     def push(self, element):
+     def push(self, *elements):
           '''Adds an element to the data structure'''
-          
-          self.frontier.append(element)
+          for element in elements:
+               self.frontier.append(element)
           
      def __bool__(self):
           if len(self.frontier)>0:
@@ -87,8 +109,8 @@ class QueueFrontier(Frontier):
      def pop(self):
           return self.frontier.pop(0)
      
-     def push(self, element):
-          return super().push(element)
+     def push(self, *elements):
+          return super().push(*elements)
      
 # For Depth-First Search
 class StackFrontier(Frontier):
@@ -98,42 +120,71 @@ class StackFrontier(Frontier):
      def pop(self):
           return super().pop()
      
-     def push(self, element):
-          return super().push(element)
+     def push(self, *elements):
+          return super().push(*elements)
      
-def actions(state:State):
-     # TODO
-     pass
+def actions(state:State)->list:
+     p_id = int(state.get_id())
+     return get_movie_id_for(p_id)
 
-def result(state, action)->State:
-     # TODO
-     pass
+# Debug
+def result(preceeding_state:State, action:int)->list[State]:
+     results = []
+     
+     # Get all the actors in the new movie
+     for star in get_stars_for(action):
+          name = get_person_name_for(star)
+          cost = preceeding_state.get_cost()+1
+          new_state = State(
+               parent=preceeding_state,
+               name=name,
+               cost=cost,
+               action=action, 
+               id=star
+          )
+          results.append(new_state)
+     return results
 
      
 def search(source:int, target:int):
      initial_state = State(
           parent=None,
-          name=get_name_for(source)
+          name=get_person_name_for(source),
+          cost=0,
+          id=source,
+          action=None
      )
      
      solutions = []
+     visited = []
      frontier = QueueFrontier()
      frontier.push(initial_state)
-     while frontier:
+     while bool(frontier):
           state:State = frontier.pop()
-          if state.get_id==target:
+          print(state)
+          if state.get_id() in visited:
+               continue
+          visited.append(state.get_id())
+          if state.get_id()==target:
                solutions.append(state)
-          
+               print(state.get_cost())
+               break
+          all = actions(state=state)
+          for action in all:
+               new_states:list = result(preceeding_state=state, action=action)
+               print(f"New states: {new_states}")
+               frontier.push(*new_states)
+     print(solutions.pop())
                
           
-     
+search(102,144)
              
-def shortest_path(source:int, target:int):
-     pass
+# def shortest_path(source:int, target:int):
+#      pass
             
-print(movies)
-print(people)
-print(stars)
-print(get_name_for(129))
+# print(movies)
+# print(people)
+# print(stars)
+# print(get_person_name_for(129))
 
           
