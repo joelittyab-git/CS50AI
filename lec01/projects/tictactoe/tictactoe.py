@@ -3,6 +3,7 @@ Tic Tac Toe Player
 """
 
 import math
+from copy import deepcopy
 
 X = "X"
 O = "O"
@@ -49,7 +50,7 @@ def actions(board):
             if board[i][j]==None:
                 board_actions.append((i,j))
             
-    return set(board_actions)
+    return board_actions
 
 
 def result(board, action):
@@ -57,8 +58,9 @@ def result(board, action):
     Returns the board that results from making move (i, j) on the board.
     """
     chance = player(board)
-    board[action[0], action[1]] = chance
-    return board
+    new_board = deepcopy(board)
+    new_board[action[0]][action[1]] = chance
+    return new_board
 
 
 def winner(board):
@@ -85,14 +87,37 @@ def terminal(board):
     """
     Returns True if game is over, False otherwise.
     """
-    raise NotImplementedError
+    
+    if winner(board=board):
+        return True
+    
+    for i in board:
+        for j in i:
+            if j is None:
+                return False
+    return True
 
 
 def utility(board):
     """
     Returns 1 if X has won the game, -1 if O has won, 0 otherwise.
     """
-    raise NotImplementedError
+    print("Board: ",board)
+    for i in range(len(board)):
+        if (board[i][0]==board[i][1]==board[i][2]==X or 
+            board[0][i]==board[1][i]==board[2][i]==X):
+            return 1
+        elif (board[i][0]==board[i][1]==board[i][2]==O or 
+              board[0][i]==board[1][i]==board[2][i]==O):
+            return -1        
+    # diagonals
+    if (board[0][0]==board[1][1]==board[2][2]==X or 
+        board[0][2]==board[1][1]==board[2][0]==X):
+            return 1
+    elif (board[0][0]==board[1][1]==board[2][2]==O or 
+        board[0][2]==board[1][1]==board[2][0]==O):
+            return -1
+    return 0
 
 
 def minimax(board):
