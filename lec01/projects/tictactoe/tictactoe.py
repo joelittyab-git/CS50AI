@@ -125,3 +125,33 @@ def minimax(board):
     Returns the optimal action for the current player on the board.
     """
     raise NotImplementedError
+
+def min_value(board):
+    # If there is no other move possible the utility of the board is its min_value
+    if terminal(board=board):
+        return utility(board=board)
+    
+    action_set = actions(board=board)
+    minima = 2
+    for action in action_set:
+        r = result(board=board, action=action)
+        tertiary = max_value(board=r)
+        if tertiary<minima:
+            minima = tertiary
+            
+    return minima
+            
+def max_value(board):
+    # If there is no other move possible the utility of the board is its max_value
+    if terminal(board=board):
+        return utility(board=board)
+    
+    action_set = actions(board=board)
+    maxima = -2
+    
+    for action in action_set:
+        r = result(board=board, action=action)
+        tertiary = min_value(r)
+        if tertiary>maxima:
+            maxima = tertiary
+    return maxima
