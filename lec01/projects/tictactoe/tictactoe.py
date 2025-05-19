@@ -102,7 +102,6 @@ def utility(board):
     """
     Returns 1 if X has won the game, -1 if O has won, 0 otherwise.
     """
-    print("Board: ",board)
     for i in range(len(board)):
         if (board[i][0]==board[i][1]==board[i][2]==X or 
             board[0][i]==board[1][i]==board[2][i]==X):
@@ -124,7 +123,32 @@ def minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
-    raise NotImplementedError
+    chance = player(board=board)
+    
+    
+    if chance==X:
+        action_set = actions(board=board)
+        optimal = None
+        maxima = -2
+        for action in action_set:
+            r = result(board=board, action=action)
+            print("Result: ",r)
+            m = min_value(board=r)
+            if m>maxima:
+                optimal = action
+                maxima = m
+        return optimal
+    elif chance==O:
+        action_set = actions(board=board)
+        minima = 2
+        optimal = None
+        for action in action_set:
+            r = result(board=board, action=action)
+            m = max_value(r)
+            if m<minima:
+                optimal = action
+                minima = m
+        return optimal        
 
 def min_value(board):
     # If there is no other move possible the utility of the board is its min_value
