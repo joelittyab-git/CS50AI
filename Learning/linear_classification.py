@@ -1,5 +1,6 @@
 from vector import Vector3D
 import csv
+from cprint import cprint
 
 data = list()
 
@@ -49,8 +50,11 @@ def classify(learning_rate = 0.1, initial_weight = Vector3D(0,0,0), max_epoch=10
                weight.set_x(weight.x + l_rate*delta*vec_x.x)
                weight.set_y(weight.y + l_rate*delta*vec_x.y)
                weight.set_z(weight.z + l_rate*delta*vec_x.z)
-                    
-          print(f"Errors: {errors} Weights: {weight} Epoch: {epoch+1}")
+                 
+          if errors==0:
+               cprint.info(f"Errors: {errors} Weights: {weight} Epoch: {epoch+1}") 
+               break
+          cprint.warn(f"Errors: {errors} Weights: {weight} Epoch: {epoch+1}")
           
           if errors==0:
                break
