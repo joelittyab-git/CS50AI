@@ -6,7 +6,7 @@ class Vec:
                if not (isinstance(component, int) or isinstance(component, float)):
                     raise Exception("Invalid vector component")
           
-          self.components = components
+          self.components = list(components)
           
      def __len__(self):
           """
@@ -134,6 +134,25 @@ class Vector2D(Vec):
           
           return self.y
      
+     def set_x(self,x):
+          """
+          Setter function for the horizontal component
+          """
+          if not (isinstance(x, int) or isinstance(x, float)):
+                    raise Exception("Invalid vector component")
+          
+          self.components[0] = x
+          
+     def set_y(self,y):
+          """
+          Setter function for the vertical component
+          """
+          if not (isinstance(y, int) or isinstance(y, float)):
+                    raise Exception("Invalid vector component")
+          
+          self.components[1] = y
+          
+     
 class Vector3D(Vec):
      def __init__(self, i,j,k):
           super().__init__(i,j,k)
@@ -178,3 +197,30 @@ class Vector3D(Vec):
           """Retuns the component that is perpendicular to the plane"""
           
           return self.z
+     
+     def set_x(self,x):
+          """
+          Setter function for the horizontal component
+          """
+          if not (isinstance(x, int) or isinstance(x, float)):
+                    raise Exception("Invalid vector component")
+          
+          self.components[0] = x
+          
+     def set_y(self,y):
+          """
+          Setter function for the vertical component
+          """
+          if not (isinstance(y, int) or isinstance(y, float)):
+                    raise Exception("Invalid vector component")
+          
+          self.components[1] = y
+          
+     def set_z(self,z):
+          """
+          Setter function for the vertical component
+          """
+          if not (isinstance(z, int) or isinstance(z, float)):
+                    raise Exception("Invalid vector component")
+          
+          self.components[2] = z
