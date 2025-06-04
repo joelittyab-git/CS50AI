@@ -109,6 +109,9 @@ class Vec:
           
           return Vec(*[a/magnitude for a in self.components])
      
+     def set_val(self, index, value):
+          self.components[index] = value
+     
      
 class Vector2D(Vec):
      def __init__(self, i,j):
