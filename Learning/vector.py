@@ -14,6 +14,9 @@ class Vec:
           """
           return len(self.components)
      
+     def __iter__(self):
+          return iter(self.components)
+     
      def __add__(self, other):
           """
           Adds two vectors
