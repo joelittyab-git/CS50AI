@@ -8,6 +8,12 @@ class Vec:
           
           self.components = list(components)
           
+     def __getitem__(self, index):
+          """
+          Returns the component at the given index
+          """
+          return self.components[index]
+          
      def __len__(self):
           """
           Returns the number of components in the vector
