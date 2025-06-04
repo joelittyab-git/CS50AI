@@ -30,7 +30,7 @@ wᵢ <- wᵢ + η(Δy)xᵢ
 '''               
 def classify(learning_rate = 0.1, initial_weight = Vector3D(0,0,0), max_epoch=100):
      """
-     Finds the weights for the given classified dataset linearly
+     Finds the weights for the given classified dataset linearly for a linearly separable dataset
      """
      weight = initial_weight     # initial weights
      l_rate = learning_rate   # η
