@@ -110,6 +110,9 @@ class Vec:
           return Vec(*[a/magnitude for a in self.components])
      
      def set_val(self, index, value):
+          """
+          Sets the value at the index
+          """
           self.components[index] = value
      
      
