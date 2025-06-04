@@ -1,0 +1,135 @@
+import math
+
+class Vec:
+     def __init__(self, *components):
+          for component in components:
+               if not (isinstance(component, int) or isinstance(component, float)):
+                    raise Exception("Invalid vector component")
+          
+          self.components = components
+          
+     def __len__(self):
+          """
+          Returns the number of components in the vector
+          """
+          return len(self.components)
+     
+     def __add__(self, other):
+          """
+          Adds two vectors
+          """
+          if not(isinstance(other, Vec) and len(self) == len(other)):
+               raise Exception("Invalid operands or invalid vector dimensions")
+          
+          zipped = zip(self.components, other.components)
+          summed = [a+b for a,b in zipped]
+          return Vec(*summed)
+     
+     def __sub__(self, other):
+          """
+          Adds two vectors
+          """
+          if not(isinstance(other, Vec) and len(self) == len(other)):
+               raise Exception("Invalid operands or invalid vector dimensions")
+          
+          zipped = zip(self.components, other.components)
+          sub = [a-b for a,b in zipped]
+          return Vec(*sub)
+     
+     def __mul__(self, scalar):
+          """
+          Returns the product of scalar multiplication
+          """
+          multiplied = [a*scalar for a in self.components]
+          return Vec(*multiplied)
+     
+     def __rmul__(self, scalar):
+        return self.__mul__(scalar)
+     
+     def __truediv__(self, scalar):
+          """
+          Divides the vector by a scalar
+          """
+          
+          if scalar == 0:
+               raise ZeroDivisionError("Cannot divide by zero")
+          
+          return Vec(*[a/scalar for a in self.components])
+     
+     def __repr__(self):
+          """
+          String representation of the vector
+          """
+          string = ",".join([str(a) for a in self.components])
+          return "<" + string + ">"
+     
+     def __eq__(self, other):
+          """
+          Comparison operation 
+          """
+          return isinstance(other, Vec) and self.components == other.components
+     
+     
+     def magnitude(self):
+          """Returns the magnitude of the vector"""
+          
+          squared = [math.pow(a,2) for a in self.components]
+          return math.sqrt(sum(squared))
+          
+     
+     def dot(self, vector):
+          """
+          Returns the dot product of the currect vector with the passed vector
+          """
+          if not isinstance(vector, Vec):
+               raise Exception("Parameter is not a vector")
+          
+          assert len(vector)==len(self)      # checks for correct dimensions
+          
+          zipped = zip(vector.components, self.components)
+          product = [a*b for a,b in zipped]
+          return sum(product)
+     
+     def normalize(self):
+          """
+          Returns the unit vector in the direction of the vector
+          """
+          magnitude = self.magnitude()
+          if magnitude==0:
+               raise ValueError("Cannot nomalize a null vector")
+          
+          return Vec(*[a/magnitude for a in self.components])
+     
+     
+class Vector2D(Vec):
+     def __init__(self, i,j):
+          super().__init__(i,j)
+          
+     @property
+     def x(self):
+          """
+          Returns the horizontal component of the vector
+          """
+          
+          return self.components[0]
+     @property
+     def y(self):
+          """Returns the vertical component of the vector"""
+          
+          return self.components[1]
+     
+     @property
+     def i(self):
+          """
+          Returns the horizontal component of the vector
+          """
+          
+          return self.x
+     
+     @property
+     def j(self):
+          """
+          Returns the vertical component of the vector
+          """
+          
+          return self.y
