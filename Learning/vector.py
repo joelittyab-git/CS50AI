@@ -133,3 +133,48 @@ class Vector2D(Vec):
           """
           
           return self.y
+     
+class Vector3D(Vec):
+     def __init__(self, i,j,k):
+          super().__init__(i,j,k)
+          
+     @property
+     def x(self):
+          """
+          Returns the horizontal component of the vector
+          """
+          
+          return self.components[0]
+     @property
+     def y(self):
+          """Returns the vertical component of the vector"""
+          
+          return self.components[1]
+     
+     @property
+     def z(self):
+          """Retuns the component that is perpendicular to the plane"""
+          
+          return self.components[2]
+     
+     @property
+     def i(self):
+          """
+          Returns the horizontal component of the vector
+          """
+          
+          return self.x
+     
+     @property
+     def j(self):
+          """
+          Returns the vertical component of the vector
+          """
+          
+          return self.y
+     
+     @property
+     def k(self):
+          """Retuns the component that is perpendicular to the plane"""
+          
+          return self.z
