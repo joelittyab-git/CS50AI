@@ -114,7 +114,8 @@ if __name__ == "__main__":
      import random
 
      random.seed(42)  # for reproducibility
-     data = [(random.randint(0, 100), random.randint(0, 100)) for _ in range(1000)]
+     data = [(random.randint(0, 100), random.randint(0, 100)) for _ in range(1000)]  # 1000 data points
+     
      print(data)
 
      # Query point
