@@ -67,10 +67,15 @@ class Node:
           
           
           
-def traverse(node:Node,query:Vector2D, best_point:Vector2D = None, best_cost = math.inf):
+def traverse(node:Node,query:Vector2D, best_point:Vector2D = None, best_cost = math.inf, layer = 1):
+     
+     if node is None:
+          return best_point,best_cost
+     
      '''
      node:(nx,ny)
      query:(qx,qy)
+     layer = 1 symbolizing the x dimension since the root node always starts from the x dimension
      '''
      nx = node.value.x
      ny = node.value.y
@@ -83,5 +88,22 @@ def traverse(node:Node,query:Vector2D, best_point:Vector2D = None, best_cost = m
           best_cost = node_distance
           best_point = deepcopy(node.value)
           
+     if layer==1:   # check against the x coordinates
+          goleft = qx<=nx 
+          primary = node.left if goleft else node.right
+          secondary = node.right if goleft else node.left 
+          axis_distance = abs(qx-nx)
+     else:     
+          goleft = qy<=ny
+          primary = node.left if goleft else node.right
+          secondary = node.right if goleft else node.left
+          condition = math.sqrt((qy-secondary.value.y)**2)<best_cost
+          axis_distance = abs(qy-ny)
+
+          
+     best_point,best_cost = traverse(primary, query,best_point,best_cost,-layer)
      
+     if  axis_distance<best_cost:
+          best_point, best_cost = traverse(secondary, query, best_point, best_cost, -layer)
      
+     return best_point,best_cost

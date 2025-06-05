@@ -36,7 +36,7 @@ class Vec:
      
      def __sub__(self, other):
           """
-          Adds two vectors
+          Subtracts two vectors
           """
           if not(isinstance(other, Vec) and len(self) == len(other)):
                raise Exception("Invalid operands or invalid vector dimensions")
