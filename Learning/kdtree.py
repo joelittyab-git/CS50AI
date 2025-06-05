@@ -1,5 +1,7 @@
 from copy import deepcopy
 from vector import Vector2D
+import math
+
 
 class BinaryTree2D:
      def __init__(self, points:list):
@@ -62,3 +64,24 @@ class Node:
                     self.left = Node(value)
                     return
                return self.left.push(value=value, flag=-flag)
+          
+          
+          
+def traverse(node:Node,query:Vector2D, best_point:Vector2D = None, best_cost = math.inf):
+     '''
+     node:(nx,ny)
+     query:(qx,qy)
+     '''
+     nx = node.value.x
+     ny = node.value.y
+     qx = query.x
+     qy = query.y
+     
+     # calcualtes the distance from the current node and validates it with existing values
+     node_distance = math.sqrt((qx-nx)**2 + (qy-ny)**2)
+     if node_distance<best_cost:
+          best_cost = node_distance
+          best_point = deepcopy(node.value)
+          
+     
+     
