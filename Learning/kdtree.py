@@ -91,13 +91,12 @@ def traverse(node:Node,query:Vector2D, best_point:Vector2D = None, best_cost = m
      if layer==1:   # check against the x coordinates
           goleft = qx<=nx 
           primary = node.left if goleft else node.right
-          secondary = node.right if goleft else node.left 
+          secondary = node.right if goleft and node.right is not None else node.left 
           axis_distance = abs(qx-nx)
      else:     
           goleft = qy<=ny
           primary = node.left if goleft else node.right
-          secondary = node.right if goleft else node.left
-          condition = math.sqrt((qy-secondary.value.y)**2)<best_cost
+          secondary = node.right if goleft and node.right is not None else node.left
           axis_distance = abs(qy-ny)
 
           
@@ -107,3 +106,29 @@ def traverse(node:Node,query:Vector2D, best_point:Vector2D = None, best_cost = m
           best_point, best_cost = traverse(secondary, query, best_point, best_cost, -layer)
      
      return best_point,best_cost
+
+# test
+if __name__ == "__main__":
+     # Sample points
+     sample_points = [
+          (2, 3),
+          (5, 4),
+          (9, 6),
+          (4, 7),
+          (8, 1),
+          (7, 2)
+     ]
+
+     # Query point
+     query_point = Vector2D(9, 2)
+
+     # Build the tree
+     tree = BinaryTree2D(sample_points)
+     root = tree.construct()
+
+     # Find nearest neighbor
+     nearest, dist = traverse(root, query_point)
+     
+     print(f"Query Point: {query_point}")
+     print(f"Nearest Neighbor: {nearest}")
+     print(f"Distance: {dist:.4f}")
