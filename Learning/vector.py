@@ -78,7 +78,7 @@ class Vec:
           """
           return isinstance(other, Vec) and self.components == other.components
      
-     
+     @property
      def magnitude(self):
           """Returns the magnitude of the vector"""
           
