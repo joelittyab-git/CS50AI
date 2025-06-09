@@ -1,10 +1,12 @@
 import math
 
 class Vec:
-     def __init__(self, *components):
+     def __init__(self, *components, name = ""):
           for component in components:
                if not (isinstance(component, int) or isinstance(component, float)):
                     raise Exception("Invalid vector component")
+               
+          self.name = name
           
           self.components = list(components)
           
