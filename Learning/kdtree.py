@@ -16,28 +16,28 @@ class BinaryTree2D:
           print("Constructing Tree...")
           cloned = deepcopy(self.points)
           
-          parent_value = cloned.pop(0)
-          self.root = Node(Vector2D(*parent_value))
+          parent_vector:Vector2D = cloned.pop(0)
+          self.root = Node(parent_vector)
           
           for i in cloned:
-               self.root.push(Vector2D(*i))
+               self.root.push(i)
                
           return self.root
      
-     def add(self, pos:tuple):
+     def add(self, pos:tuple, classifier = ''):
           """Adds a new point to the given points and appends a new Node to the tree"""
           
           
           if len(pos)!=2:
                raise ValueError(f"Invalid arguments. Expected 2 argumens but received {len(pos)}")
           
-          self.points.append(pos)
+          self.points.append(Vector2D(*pos, name=classifier))
           self.root.push(Vector2D(*pos))
           
      def add_vec(self, vector:Vector2D):
           """Adds a new point in the form of a new vector to the tree"""
           
-          self.points.append((vector.x,vector.y))
+          self.points.append(vector)
           self.root.push(vector)
                
                
