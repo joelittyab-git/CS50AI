@@ -4,8 +4,9 @@ import math
 import heapq
 
 class BinaryTree2D:
-     def __init__(self, points:list):
-          self.points = points
+     def __init__(self, points:list = []):
+          self.points = []
+          self.points.extend(points)
           self.root = None
           
      def construct(self):
