@@ -1,5 +1,8 @@
 from vector import Vector3D, Vec
+from kdtree import Node, BinaryTree2D
 import csv
+
+
 
 data = list()
 
@@ -20,6 +23,9 @@ def load_csv():
 
 load_csv()
 
+def plot_data():
+     for x1,x2,y in data:
+          BinaryTree2D()
 
 def classify(k, vector:Vec):
      pass
