@@ -119,8 +119,8 @@ class Vec:
      
      
 class Vector2D(Vec):
-     def __init__(self, i,j):
-          super().__init__(i,j)
+     def __init__(self, i,j, name=""):
+          super().__init__(i,j, name)
           
      @property
      def x(self):
@@ -171,8 +171,8 @@ class Vector2D(Vec):
           
      
 class Vector3D(Vec):
-     def __init__(self, i,j,k):
-          super().__init__(i,j,k)
+     def __init__(self, i,j,k, name = ""):
+          super().__init__(i,j,k, name)
           
      @property
      def x(self):
