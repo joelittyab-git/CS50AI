@@ -72,7 +72,7 @@ class Vec:
           String representation of the vector
           """
           string = ",".join([str(a) for a in self.components])
-          return "<" + string + ">"
+          return f"{self.name}<{string}>"
      
      def __eq__(self, other):
           """
@@ -120,7 +120,7 @@ class Vec:
      
 class Vector2D(Vec):
      def __init__(self, i,j, name=""):
-          super().__init__(i,j, name)
+          super().__init__(i,j, name=name)
           
      @property
      def x(self):
@@ -172,7 +172,7 @@ class Vector2D(Vec):
      
 class Vector3D(Vec):
      def __init__(self, i,j,k, name = ""):
-          super().__init__(i,j,k, name)
+          super().__init__(i,j,k, name=name)
           
      @property
      def x(self):
