@@ -32,6 +32,12 @@ class BinaryTree2D:
           
           self.points.append(pos)
           self.root.push(Vector2D(*pos))
+          
+     def add_vec(self, vector:Vector2D):
+          """Adds a new point in the form of a new vector to the tree"""
+          
+          self.points.append((vector.x,vector.y))
+          self.root.push(vector)
                
                
 class Node:
