@@ -1,5 +1,5 @@
 from copy import deepcopy
-from vector import Vector2D
+from linaris.geometry.vector import Vector2D
 import math
 import heapq
 

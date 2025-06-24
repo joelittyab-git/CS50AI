@@ -1,4 +1,4 @@
-from vector import Vector2D, Vec
+from linaris.geometry.vector import Vec,Vector2D
 from kdtree import Node, BinaryTree2D,traverse
 import csv
 

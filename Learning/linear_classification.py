@@ -1,4 +1,4 @@
-from vector import Vector3D
+from linaris.geometry.vector import Vector3D
 import csv
 from cprint import cprint
 
