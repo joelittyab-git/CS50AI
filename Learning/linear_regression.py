@@ -22,8 +22,8 @@ def regress(learning_rate = 0.01, max_epoch = 1000):
      """Linear regression by gradient descent of a learning rate 'β', slope 'm' and intercept 'c'"""
      
      '''Hypothesis line having the equation:
-     >>> y = x'''
-     hypothesis = Line2D(0,0, name="Y")
+     >>> y = 0'''
+     regression_line = Line2D(0,0, name="Y")
      
      """Creating differential symbols"""
      m,c = sp.symbols('m c')
@@ -41,11 +41,27 @@ def regress(learning_rate = 0.01, max_epoch = 1000):
           dS_dm = sp.diff(S,m)
           dS_dc = sp.diff(S,c)
           
-          # print(dS_dc)
+          # print(dS_dc) 
           # print(dS_dm)
           
           # substituting values in the derived equation
-          dS_dm_val = dS_dm.subs({m:hypothesis.slope, c:hypothesis.intercept}).evalf()
-          dS_dc_val = dS_dc.subs({m:hypothesis.slope, c:hypothesis.intercept}).evalf()
+          dS_dm_val = dS_dm.subs({m:regression_line.slope, c:regression_line.intercept}).evalf()
+          dS_dc_val = dS_dc.subs({m:regression_line.slope, c:regression_line.intercept}).evalf()
+          
+          """Calculates the change in intercept  and slope: 
+          >>> Δm = (∂S/∂m)β
+          >>> Δc = (∂S/∂c)β
+          """
+          del_m = dS_dm_val*learning_rate
+          del_c = dS_dc_val*learning_rate
+          
+          """Updates the value of slope and intercept":
+          >>> m` = m + Δm
+          >>> c` = c + Δc
+          """
+          m_prime = regression_line.slope + del_m
+          c_prime = regression_line.intercept + del_c  
+          regression_line.set_slope(m_prime)
+          regression_line.set_intercept(c_prime)
           
 regress()
